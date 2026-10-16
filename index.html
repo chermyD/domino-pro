@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#153d32">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Dominó Pro">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Dominó Pro</title>
+<style>
+:root{color-scheme:light;--green:#153d32;--green2:#28684f;--gold:#f1ce7d;--bg:#f3f6f3;--card:#fff;--text:#1c2922;--muted:#68776f;--line:#dce5de;--red:#a63737}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:calc(22px + env(safe-area-inset-bottom))}
+header{background:var(--green);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 18px;border-radius:0 0 22px 22px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:14px;background:#ffffff1d;display:grid;place-items:center;font-size:27px}.brand h1{font-size:23px;margin:0}.brand p{margin:4px 0 0;color:#d3e4d9;font-size:13px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}.metric{background:#ffffff14;border-radius:12px;padding:10px}.metric span{display:block;color:#d3e4d9;font-size:11px}.metric strong{display:block;font-size:21px;margin-top:4px;overflow-wrap:anywhere}
+nav{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:12px 12px 0}.tab{border:0;background:#e4ebe5;color:#355347;border-radius:10px;padding:11px 3px;font-size:12px;font-weight:650}.tab.active{background:var(--green);color:#fff}
+main{padding:14px;max-width:720px;margin:auto}.panel{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:16px;margin-bottom:13px;box-shadow:0 2px 7px #173c3210}.panel h2{font-size:18px;margin:0 0 12px}.sub{color:var(--muted);font-size:13px;line-height:1.45;margin-top:-5px;margin-bottom:14px}
+label{display:block;font-size:13px;font-weight:650;margin:10px 0 6px}input,select{width:100%;min-height:44px;border:1px solid #cbd7ce;border-radius:10px;padding:10px 12px;background:#fff;color:var(--text);font-size:16px}
+button{font:inherit;cursor:pointer}.btn{border:0;border-radius:11px;padding:12px 14px;background:var(--green);color:white;font-weight:700;min-height:44px}.btn.secondary{background:#e8efe9;color:var(--green)}.btn.danger{background:#fff0f0;color:var(--red)}.btn.full{width:100%;margin-top:12px}.row{display:flex;align-items:center;gap:10px}.row>*{flex:1;min-width:0}.team{border:1px solid var(--line);border-radius:13px;padding:12px;margin:10px 0}.teamtop{display:flex;align-items:center;gap:10px}.ranknum{width:34px;height:34px;flex:0 0 34px;border-radius:10px;background:#e8efe9;display:grid;place-items:center;font-weight:800}.teamname{font-weight:750;overflow-wrap:anywhere}.points{font-size:23px;font-weight:850;margin-left:auto;text-align:right}.small{font-size:12px;color:var(--muted);margin-top:4px}.bar{height:6px;background:#e7ede8;border-radius:20px;overflow:hidden;margin-top:10px}.bar span{display:block;height:100%;background:var(--green2);border-radius:20px}.pill{font-size:11px;border-radius:20px;padding:4px 7px;background:#f8edcf;color:#70551a}.notice{padding:12px;border-radius:12px;background:#edf5ee;color:#23553c;font-size:13px;line-height:1.4}.historyitem{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.historyitem:last-child{border-bottom:0}.historyitem .details{flex:1;min-width:0}.historyitem strong{display:block;font-size:14px}.historyitem small{color:var(--muted)}.gain{font-weight:800;color:var(--green2)}.empty{text-align:center;padding:24px 10px;color:var(--muted);font-size:14px}.hidden{display:none!important}.footer{font-size:11px;color:var(--muted);text-align:center;padding:8px 18px 20px;line-height:1.5}
+@media(min-width:600px){main{padding:20px}.teamgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.team{margin:0 0 10px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="logo">🁣</div><div><h1>Dominó Pro</h1><p>8 parejas · Meta de 200 puntos</p></div></div>
+ <div class="summary">
+  <div class="metric"><span>Manos anotadas</span><strong id="totalHands">0</strong></div>
+  <div class="metric"><span>Partidas finalizadas</span><strong id="totalMatches">0</strong></div>
+  <div class="metric"><span>Líder por puntos</span><strong id="leaderScore">0</strong></div>
+ </div>
+</header>
+<nav>
+ <button class="tab active" data-tab="marcador">Marcador</button>
+ <button class="tab" data-tab="ranking">Ranking</button>
+ <button class="tab" data-tab="historial">Historial</button>
+ <button class="tab" data-tab="equipos">Parejas</button>
+</nav>
+<main>
+<section id="marcador">
+ <div class="panel">
+  <h2>Registrar una mano</h2><p class="sub">Anota la pareja ganadora y los puntos que sumó. Los cambios se guardan en este dispositivo.</p>
+  <label for="winner">Pareja ganadora</label><select id="winner"></select>
+  <label for="handPoints">Puntos de esta mano</label><input id="handPoints" type="number" min="1" max="200" inputmode="numeric" value="10">
+  <button class="btn full" id="addHand">＋ Registrar mano</button>
+  <div id="winnerNotice" class="notice hidden" style="margin-top:12px"></div>
+ </div>
+ <div class="panel"><h2>Marcador de las parejas</h2><p class="sub">Clasificado por puntos acumulados; en empate, por manos ganadas.</p><div id="scoreboard" class="teamgrid"></div></div>
+</section>
+<section id="ranking" class="hidden">
+ <div class="panel"><h2>Clasificación de la liga</h2><p class="sub">Las estadísticas de partidas se actualizan cuando registras un resultado final.</p><div id="rankingTable"></div></div>
+ <div class="panel">
+  <h2>Finalizar una partida</h2><p class="sub">Registra una sola vez cada resultado final a 200 puntos.</p>
+  <label for="matchWinner">Pareja ganadora</label><select id="matchWinner"></select>
+  <label for="matchLoser">Pareja perdedora</label><select id="matchLoser"></select>
+  <button class="btn full" id="finishMatch">✓ Guardar resultado final</button>
+ </div>
+</section>
+<section id="historial">
+ <div class="panel"><h2>Historial de jugadas</h2><p class="sub">Registro de manos y partidas guardadas en este teléfono.</p><div id="historyList"></div>
+ <button class="btn secondary full" id="undo">↶ Deshacer último registro</button>
+ <button class="btn secondary full" id="export">⇩ Exportar historial a CSV</button>
+ </div>
+</section>
+<section id="equipos">
+ <div class="panel"><h2>Nombres de las parejas</h2><p class="sub">Puedes cambiar los nombres sin perder los puntos ya registrados.</p><div id="teamEditor"></div><button class="btn full" id="saveNames">Guardar nombres</button></div>
+ <div class="panel"><h2>Administración de datos</h2><div class="notice">Los datos se guardan localmente en este navegador o en la app instalada. No se sincronizan automáticamente con otros dispositivos.</div>
+ <button class="btn secondary full" id="backup">Crear copia de seguridad JSON</button><label for="restoreFile">Restaurar copia de seguridad</label><input id="restoreFile" type="file" accept="application/json">
+ <button class="btn danger full" id="reset">Reiniciar todos los datos</button></div>
+</section>
+</main>
+<div class="footer">Dominó Pro · Prototipo local · Recuerda exportar una copia de seguridad periódicamente.</div>
+<script>
+const KEY='domino-pro-local-v1';
+const initial=()=>({teams:Array.from({length:8},(_,i)=>`Pareja ${i+1}`),scores:Array(8).fill(0),handWins:Array(8).fill(0),matchWins:Array(8).fill(0),matchLosses:Array(8).fill(0),matchesPlayed:Array(8).fill(0),history:[],nextId:1});
+let state=load();
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.teams)&&s.teams.length===8)return s}catch(e){}return initial()}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function sorted(){return state.teams.map((name,i)=>({name,i,score:state.scores[i],hands:state.handWins[i],mw:state.matchWins[i],ml:state.matchLosses[i],played:state.matchesPlayed[i],pct:state.matchesPlayed[i]?Math.round(state.matchWins[i]/state.matchesPlayed[i]*100):0})).sort((a,b)=>b.score-a.score||b.hands-a.hands||a.name.localeCompare(b.name))}
+function optionsHtml(selected='0'){return state.teams.map((t,i)=>`<option value="${i}" ${String(i)===String(selected)?'selected':''}>${esc(t)}</option>`).join('')}
+function syncSelects(){for(const id of ['winner','matchWinner','matchLoser']){const el=document.getElementById(id),old=el.value;el.innerHTML=optionsHtml(old||'0');if(!el.value)el.value='0'}if(document.getElementById('matchLoser').value===document.getElementById('matchWinner').value)document.getElementById('matchLoser').value=state.teams.length>1?'1':'0'}
+function teamCard(t,pos){return `<div class="team"><div class="teamtop"><div class="ranknum">${pos===0?'🏆':pos+1}</div><div style="min-width:0"><div class="teamname">${esc(t.name)}</div><div class="small">${t.hands} manos ganadas · ${t.pct}% partidas ganadas</div></div><div class="points">${t.score}<div class="small">/ 200 pts</div></div></div><div class="bar"><span style="width:${Math.min(100,t.score/2)}%"></span></div>${t.score>=200?'<div class="small"><span class="pill">Meta alcanzada</span></div>':''}</div>`}
+function render(){syncSelects();const r=sorted(),hands=state.history.filter(h=>h.type==='hand').length,matches=state.history.filter(h=>h.type==='match').length;
+document.getElementById('totalHands').textContent=hands;document.getElementById('totalMatches').textContent=matches;document.getElementById('leaderScore').textContent=r[0]?.score||0;
+document.getElementById('scoreboard').innerHTML=r.map((t,i)=>teamCard(t,i)).join('');
+document.getElementById('rankingTable').innerHTML=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr style="text-align:left;color:#68776f"><th style="padding:9px 4px">Pos.</th><th>Pareja</th><th>Puntos</th><th>Vict.</th><th>Der.</th><th>%</th></tr></thead><tbody>${r.map((t,i)=>`<tr style="border-top:1px solid #dce5de"><td style="padding:12px 4px;font-weight:800">${i+1}</td><td style="padding:12px 4px">${esc(t.name)}</td><td style="font-weight:800">${t.score}</td><td>${t.mw}</td><td>${t.ml}</td><td>${t.pct}%</td></tr>`).join('')}</tbody></table></div>`;
+document.getElementById('teamEditor').innerHTML=state.teams.map((t,i)=>`<label for="team${i}">Pareja ${i+1}</label><input id="team${i}" maxlength="50" value="${esc(t)}">`).join('');
+const hist=state.history.slice().reverse();document.getElementById('historyList').innerHTML=hist.length?hist.map(h=>`<div class="historyitem"><div class="details"><strong>${h.type==='hand'?'Mano':'Partida'} ${h.id}</strong><small>${esc(state.teams[h.team]||'Pareja')} · ${new Date(h.date).toLocaleString('es-DO')}</small></div><div class="gain">${h.type==='hand'?'+'+h.points+' pts':'Victoria'}</div></div>`).join(''):'<div class="empty">Todavía no hay jugadas registradas.</div>';
+document.getElementById('undo').disabled=!state.history.length;
+}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));['marcador','ranking','historial','equipos'].forEach(id=>document.getElementById(id).classList.toggle('hidden',id!==b.dataset.tab));}));
+document.getElementById('addHand').addEventListener('click',()=>{const team=+document.getElementById('winner').value,points=+document.getElementById('handPoints').value;if(!Number.isInteger(points)||points<1||points>200){alert('Introduce puntos enteros entre 1 y 200.');return}state.scores[team]+=points;state.handWins[team]++;state.history.push({type:'hand',id:state.nextId++,team,points,date:new Date().toISOString()});save();const n=document.getElementById('winnerNotice');n.classList.remove('hidden');n.textContent=state.scores[team]>=200?`🏆 ${state.teams[team]} ha alcanzado o superado los 200 puntos. Confirma el resultado en Clasificación si la partida terminó.`:`Mano guardada. ${state.teams[team]} suma ${points} puntos y acumula ${state.scores[team]}.`;});
+document.getElementById('finishMatch').addEventListener('click',()=>{const w=+document.getElementById('matchWinner').value,l=+document.getElementById('matchLoser').value;if(w===l){alert('La pareja ganadora y perdedora deben ser distintas.');return}if(!confirm(`¿Confirmas la victoria de ${state.teams[w]} sobre ${state.teams[l]}?`))return;state.matchWins[w]++;state.matchLosses[l]++;state.matchesPlayed[w]++;state.matchesPlayed[l]++;state.history.push({type:'match',id:state.nextId++,team:w,opponent:l,date:new Date().toISOString()});save();alert('Resultado final guardado.');});
+document.getElementById('saveNames').addEventListener('click',()=>{state.teams=state.teams.map((t,i)=>document.getElementById('team'+i).value.trim()||`Pareja ${i+1}`);save();alert('Nombres guardados.');});
+document.getElementById('undo').addEventListener('click',()=>{const h=state.history.pop();if(!h)return;if(h.type==='hand'){state.scores[h.team]=Math.max(0,state.scores[h.team]-h.points);state.handWins[h.team]=Math.max(0,state.handWins[h.team]-1)}else{state.matchWins[h.team]=Math.max(0,state.matchWins[h.team]-1);state.matchLosses[h.opponent]=Math.max(0,state.matchLosses[h.opponent]-1);state.matchesPlayed[h.team]=Math.max(0,state.matchesPlayed[h.team]-1);state.matchesPlayed[h.opponent]=Math.max(0,state.matchesPlayed[h.opponent]-1)}save()});
+function download(filename,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+document.getElementById('export').addEventListener('click',()=>{const rows=[['tipo','id','pareja','oponente','puntos','fecha'],...state.history.map(h=>[h.type,h.id,state.teams[h.team],h.opponent==null?'':state.teams[h.opponent],h.points==null?'':h.points,h.date])];download('domino-pro-historial.csv','\ufeff'+rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(',')).join('\r\n'),'text/csv;charset=utf-8')});
+document.getElementById('backup').addEventListener('click',()=>download('domino-pro-copia.json',JSON.stringify(state,null,2),'application/json'));
+document.getElementById('restoreFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const s=JSON.parse(await f.text());if(!Array.isArray(s.teams)||s.teams.length!==8||!Array.isArray(s.history))throw Error();if(confirm('¿Reemplazar los datos actuales con esta copia?')){state=s;save();alert('Copia restaurada.')}}catch(err){alert('No se pudo leer la copia. Selecciona un archivo JSON válido de Dominó Pro.')}e.target.value=''});
+document.getElementById('reset').addEventListener('click',()=>{if(confirm('¿Borrar todos los marcadores e historiales de este dispositivo? Exporta una copia antes si la necesitas.')){state=initial();save();document.getElementById('winnerNotice').classList.add('hidden')}});
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+render();
+</script>
+</body>
+</html>
