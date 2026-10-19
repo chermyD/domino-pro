@@ -1,4 +1,4 @@
-const CACHE_NAME='domino-pro-v2';
+const CACHE_NAME='domino-pro-v4';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(ASSETS)));self.skipWaiting()});
 self.addEventListener('activate',event=>{event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('domino-pro-')&&k!==CACHE_NAME).map(k=>caches.delete(k)));await self.clients.claim()})())});
